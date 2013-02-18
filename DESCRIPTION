@@ -1,0 +1,13 @@
+Package: elephant
+Maintainer: Carlos Scheidegger <cscheid@research.att.com>
+Author: Carlos Scheidegger <cscheid@research.att.com>
+Version: 0.0.1
+License: MIT
+Title: Elephant - a git-backed serializable environment
+Description: Elephants (are R environments transparently backed to git that) never forget.
+Requires: guitar
+Suggests:
+    testthat,
+    roxygen2
+Collate:
+    'elephant-package.r'
