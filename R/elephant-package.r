@@ -21,9 +21,7 @@ tell.elephant <- function(elephant, key, value)
     remove_file_from_head(elephant$repository, key)
   } else {
     name <- tempfile()
-    tf <- file(name, "wb")
-    serialize(value, tf, FALSE)
-    close(tf)
+    saveRDS(value, name, FALSE)
     add_file_to_head(elephant$repository, name, key)
     unlink(name)
   }
@@ -31,12 +29,9 @@ tell.elephant <- function(elephant, key, value)
 
 ask.elephant <- function(elephant, key)
 {
-  value <- file(str_c(elephant$repository$workdir(),"/",key), "rb")
-  if (is.null(value))
+  value.path <- str_c(elephant$repository$workdir(),"/",key)
+  if (!file.exists(value.path))
     stop("key not found")
-  result <- unserialize(value)
-  close(value)
+  result <- readRDS(value.path)
   result
 }
-
-
