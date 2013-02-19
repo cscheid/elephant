@@ -18,3 +18,13 @@ test_that("elephants can be told and asked things", {
   tell.elephant(e, "foo", NULL)
   expect_that(ask.elephant(e, "foo"), throws_error())
 })
+
+test_that("generic functions work", {
+  e <- new.elephant(elephant.path)
+  e$foo = 3
+  expect_that(e$foo, equals(3))
+  e$foo = 5
+  expect_that(e$foo, equals(5))
+  e$foo = NULL
+  expect_that(e$foo, throws_error())
+})
