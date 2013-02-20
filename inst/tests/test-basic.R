@@ -9,6 +9,11 @@ test_that("elephants can be created", {
   expect_that(e, is_a("elephant"))
 })
 
+test_that("elephants can be loaded", {
+  e <- open.elephant(elephant.path)
+  expect_that(e, is_a("elephant"))
+})
+
 test_that("elephants can be told and asked things", {
   e <- new.elephant(elephant.path)
   tell.elephant(e, "foo", 3)

@@ -8,6 +8,12 @@ library(lubridate)
 
 open.elephant <- function(path.to.backend)
 {
+  result <- list()
+  result$repository <- new(guitar::Repository, path.to.backend)
+  if (result$repository$is_bare())
+    stop("Only works on non-bare repositories")
+  class(result) <- c("elephant")
+  result
 }
 
 new.elephant <- function(path.to.backend)
@@ -30,12 +36,19 @@ tell.elephant <- function(elephant, key, value)
   }
 }
 
-ask.elephant <- function(elephant, key)
+ask.elephant <- function(elephant, key, time=NULL)
 {
-  value.path <- str_c(.subset2(elephant, "repository")$workdir(),"/",key)
-  if (!file.exists(value.path))
-    stop("key not found")
-  result <- readRDS(value.path)
+  if (is.null(time)) {
+    value.path <- str_c(.subset2(elephant, "repository")$workdir(),"/",key)
+    if (!file.exists(value.path))
+      stop("key not found")
+    result <- readRDS(value.path)
+  } else {
+    commit <- locate.commit.by.time(elephant, time)
+    tree <- commit$tree()
+    vec <- tree$entry_bypath(key)$object()$data()
+    result <- unserialize(vec)
+  }
   result
 }
 
@@ -57,7 +70,7 @@ names.elephant <- function(elephant)
   vapply(0:(count-1), function(i) { index$get_by_index(i)$path }, c(""))
 }
 
-all.versions <- function(elephant)
+all.commits <- function(elephant)
 {
   current_commit <- .subset2(elephant, "repository")$head()$peel(GIT_OBJ_COMMIT)
   ancestry <- list(current_commit)
@@ -77,7 +90,7 @@ to.posix.time <- function(git_time)
 }
 
 # locate the latest commit before 'time'
-locate.checkout.time <- function(elephant, time)
+locate.commit.by.time <- function(elephant, time)
 {
   # when we cache the commit ancestry, the binary search here will make sense
   # right now it seems wasteful to create the whole vector and then traverse it again
@@ -86,7 +99,7 @@ locate.checkout.time <- function(elephant, time)
   # ASSUMPTION! time is monotonic on commits.  FIXME If people commit
   # data versions across leap seconds, this could be bad.
   
-  commits <- all.versions(elephant)
+  commits <- all.commits(elephant)
   times <- lapply(commits, function(x) to.posix.time(x$time()))
 
   if (time > times[[1]]) {
