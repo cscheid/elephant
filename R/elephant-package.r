@@ -86,7 +86,7 @@ all.commits <- function(elephant)
 
 to.posix.time <- function(git_time)
 {
-  as.POSIXct(git_time$time, origin="1970-01-01")
+  .POSIXct(git_time$time)
 }
 
 # locate the latest commit before 'time'
