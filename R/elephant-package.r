@@ -4,7 +4,6 @@
 #' @docType package
 
 library(guitar)
-library(lubridate)
 
 open.elephant <- function(path.to.backend)
 {
