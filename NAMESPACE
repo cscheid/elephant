@@ -1,0 +1,7 @@
+export(new.elephant)
+export(open.elephant)
+export(tell.elephant)
+export(ask.elephant)
+export("$.elephant")
+export("$<-.elephant")
+export(names.elephant)

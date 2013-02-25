@@ -3,8 +3,6 @@
 #' @name elephant
 #' @docType package
 
-library(guitar)
-
 open.elephant <- function(path.to.backend)
 {
   result <- list()
@@ -69,6 +67,8 @@ names.elephant <- function(elephant)
   vapply(0:(count-1), function(i) { index$get_by_index(i)$path }, c(""))
 }
 
+################################################################################
+
 all.commits <- function(elephant)
 {
   current_commit <- .subset2(elephant, "repository")$head()$peel(GIT_OBJ_COMMIT)
@@ -91,9 +91,9 @@ to.posix.time <- function(git_time)
 # locate the latest commit before 'time'
 locate.commit.by.time <- function(elephant, time)
 {
-  # when we cache the commit ancestry, the binary search here will make sense
-  # right now it seems wasteful to create the whole vector and then traverse it again
-  # every time
+  # when we cache the commit ancestry, the binary search here will
+  # make sense right now it seems wasteful to create the whole vector
+  # and then traverse it again every time
 
   # ASSUMPTION! time is monotonic on commits.  FIXME If people commit
   # data versions across leap seconds, this could be bad.

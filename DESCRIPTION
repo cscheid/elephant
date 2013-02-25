@@ -5,7 +5,7 @@ Version: 0.0.1
 License: MIT
 Title: Elephant - a git-backed serializable environment
 Description: Elephants (are R environments transparently backed to git that) never forget.
-Depends: guitar
+Depends: guitar, stringr
 Suggests:
     testthat,
     roxygen2
